@@ -105,17 +105,17 @@ router.get('/media/mediaCarros', async (req, res) => {
     }
 });
 
-// Método POST para cadastrar um livro
+// Método POST para inserir no banco de dados
 router.post('/', async (req, res) => {
     try {
-        const query = `INSERT INTO carros (modelo, preco, caracteristicas, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?)`;
-        const replacements = [req.body.modelo, req.body.preco, req.body.caracteristicas, new Date(), new Date()];
+        const query = `INSERT INTO detalhes_livros (imagem_capa, sinopse, info_autor, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?)`;
+        const replacements = [req.body.imagem_capa, req.body.sinopse, req.body.info_autor, new Date(), new Date()];
 
         const [results, metadata] = await sequelize.query(query, { replacements });
 
         res.status(201).json({
             success: true,
-            message: "Tarefa criada com sucesso",
+            message: "Operação criada com sucesso",
             results: results,
         });
     } catch (error) {

@@ -108,14 +108,15 @@ router.get('/media/mediaCarros', async (req, res) => {
 // Método POST para cadastrar um livro
 router.post('/', async (req, res) => {
     try {
-        const query = `INSERT INTO carros (modelo, preco, caracteristicas, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?)`;
-        const replacements = [req.body.modelo, req.body.preco, req.body.caracteristicas, new Date(), new Date()];
+        const query = `INSERT INTO livros 
+        (isbn, titulo, autor, genero, detalhes_livroId, data_publicacao, num_paginas, status, emprestimo_disponivel, leitura_local, qtde_dias, codigo_barras, num_exemplares, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        const replacements = [req.body.isbn, req.body.autor, req.body.genero, req.body.detalhes_livroId, req.body.data_publicacao, req.body.num_paginas, req.body.status, req.body.emprestimo_disponivel, req.body.leitura_local, req.body.qtde_dias, req.body.codigo_barras, req.body.num_exemplares, new Date(), new Date()];
 
         const [results, metadata] = await sequelize.query(query, { replacements });
 
         res.status(201).json({
             success: true,
-            message: "Tarefa criada com sucesso",
+            message: "Operação criada com sucesso",
             results: results,
         });
     } catch (error) {

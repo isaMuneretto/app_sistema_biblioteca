@@ -64,14 +64,14 @@ router.get('/:id', async (req, res) => {
  // Método POST para cadastrar um livro
  router.post('/', async (req, res) => {
     try {
-        const query = `INSERT INTO inventarios ( quantidade, carroId, createdAt, updatedAt) VALUES (?, ?, ?, ?)`;
-        const replacements = [req.body.quantidade, req.body.carroId, new Date(), new Date()];
+        const query = `INSERT INTO reservas ( usuarioId, livroId, data_reserva, data_expiração, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?)`;
+        const replacements = [req.body.usuarioId, req.body.livroId, req.body.data_reserva, req.body.data_expiração, new Date(), new Date()];
 
         const [results, metadata] = await sequelize.query(query, { replacements });
 
         res.status(201).json({
             success: true,
-            message: "Tarefa criada com sucesso",
+            message: "Operação criada com sucesso",
             results: results,
         });
     } catch (error) {
