@@ -41,11 +41,11 @@ const Livro = db.define("livro", {
         allowNull: false, 
     },
     emprestimo_disponivel: {
-        type: Sequelize.BOOLEAN,
+        type: Sequelize.STRING,
         allowNull: false,
     },
     leitura_local: {
-        type: Sequelize.BOOLEAN,
+        type: Sequelize.STRING,
         allowNull: false,
     },
     qtde_dias: {

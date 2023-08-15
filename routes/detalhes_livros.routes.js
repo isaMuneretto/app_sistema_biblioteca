@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { QueryTypes } = require('sequelize');
 const sequelize = require("../sequelize");
-const Livro = require('../model/livros'); 
+const Livro = require('../model/livros');
 const detalhe_livro = require('../model/detalhes_livros');
 
 sequelize.sync();
@@ -139,12 +139,17 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-//método DELETE para deletar um carro
+//método DELETE para deletar através do id o detalhe do livro
 router.delete('/:id', async (req, res) => {
-    const { id } = req.params; //pega o id enviado pela requisição para ser excluído
     try {
-        await sequelize.query("DELETE FROM carros WHERE id = ?", { replacements: [id], type: QueryTypes.DELETE });
-        res.status(200).json({ message: 'Carro deletado com sucesso.' }); //statusCode indica ok no delete
+        const { id } = req.params; //pega o id enviado pela requisição para ser excluído
+
+        await sequelize.query("DELETE FROM detalhes_livros WHERE id = ?",
+            {
+                replacements: [id],
+                type: QueryTypes.DELETE
+            });
+        res.status(200).json({ message: 'Detalhes do livro deletado com sucesso.' }); //statusCode indica ok no delete
     } catch (error) {
         res.status(400).json({ msg: error.message }); //retorna status de erro e mensagens
     }

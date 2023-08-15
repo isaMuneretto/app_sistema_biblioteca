@@ -109,8 +109,8 @@ router.get('/media/mediaCarros', async (req, res) => {
 router.post('/', async (req, res) => {
     try {
         const query = `INSERT INTO livros 
-        (isbn, titulo, autor, genero, detalhes_livroId, data_publicacao, num_paginas, status, emprestimo_disponivel, leitura_local, qtde_dias, codigo_barras, num_exemplares, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-        const replacements = [req.body.isbn, req.body.autor, req.body.genero, req.body.detalhes_livroId, req.body.data_publicacao, req.body.num_paginas, req.body.status, req.body.emprestimo_disponivel, req.body.leitura_local, req.body.qtde_dias, req.body.codigo_barras, req.body.num_exemplares, new Date(), new Date()];
+        (isbn, titulo, autor, genero, detalhes_livrosId, data_publicacao, num_paginas, status, emprestimo_disponivel, leitura_local, qtde_dias, codigo_barras, num_exemplares, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        const replacements = [req.body.isbn, req.body.titulo, req.body.autor, req.body.genero, req.body.detalhes_livroId, req.body.data_publicacao, req.body.num_paginas, req.body.status, req.body.emprestimo_disponivel, req.body.leitura_local, req.body.qtde_dias, req.body.codigo_barras, req.body.num_exemplares, new Date(), new Date()];
 
         const [results, metadata] = await sequelize.query(query, { replacements });
 
@@ -140,12 +140,17 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-//método DELETE para deletar um carro
+//método DELETE para deletar através do id um livro
 router.delete('/:id', async (req, res) => {
-    const { id } = req.params; //pega o id enviado pela requisição para ser excluído
     try {
-        await sequelize.query("DELETE FROM carros WHERE id = ?", { replacements: [id], type: QueryTypes.DELETE });
-        res.status(200).json({ message: 'Carro deletado com sucesso.' }); //statusCode indica ok no delete
+        const { id } = req.params; //pega o id enviado pela requisição para ser excluído
+
+        await sequelize.query("DELETE FROM livros WHERE id = ?",
+            {
+                replacements: [id],
+                type: QueryTypes.DELETE
+            });
+        res.status(200).json({ message: 'Livro deletado com sucesso.' }); //statusCode indica ok no delete
     } catch (error) {
         res.status(400).json({ msg: error.message }); //retorna status de erro e mensagens
     }

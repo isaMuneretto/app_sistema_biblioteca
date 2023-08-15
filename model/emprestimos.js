@@ -26,7 +26,7 @@ const Emprestimo = db.define("emprestimo", {
         allowNull: false,
     },
     multa_atraso: {
-        type: Sequelize.STRING,
+        type: Sequelize.FLOAT,
         allowNull: false,
     },
 });

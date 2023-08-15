@@ -12,7 +12,7 @@ const detalhe_livro = db.define("detalhes_livros", {
         allowNull: false,
     },
     sinopse: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false,
     },
     info_autor: {

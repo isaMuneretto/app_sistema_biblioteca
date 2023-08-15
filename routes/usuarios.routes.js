@@ -1,21 +1,21 @@
 const express = require('express');
 const router = express.Router();
 const { QueryTypes } = require('sequelize');
-const sequelize = require("../sequelize"); 
+const sequelize = require("../sequelize");
 const Usuario = require('../model/usuarios');
 
 sequelize.sync();
 
 //GET Listar todos os pedidos junto com informações do cliente e detalhes do carro.
 router.get('/', async (req, res) => {
-    const {page = 1 , limit = 10} = req.query;
+    const { page = 1, limit = 10 } = req.query;
     try {
         const [results, metadata] = await sequelize.query(
             `SELECT pedidos.*, clientes.*, carros.* FROM pedidos 
             INNER JOIN clientes ON pedidos.clienteId = clientes.id
             INNER JOIN carros ON pedidos.carroId = carros.id
             ORDER BY pedidos.updatedAt DESC LIMIT :limit OFFSET :offset`,
-            { 
+            {
                 replacements: { limit: limit, offset: (page - 1) * limit },
                 type: sequelize.QueryTypes.SELECT
             }
@@ -59,20 +59,20 @@ router.get('/:id', async (req, res) => {
     try {
         const [results, metadata] = await sequelize.query(
             `SELECT * FROM pedidos WHERE id = ?`,
-            { 
+            {
                 replacements: { id: req.params.id },
-                type: sequelize.QueryTypes.SELECT 
+                type: sequelize.QueryTypes.SELECT
             }
         );
-        if (results.length === 0){
+        if (results.length === 0) {
             res.status(404).json({
                 sucess: false,
-                message:"pedido não encontrado",
+                message: "pedido não encontrado",
             });
         } else {
             res.json({
                 sucess: true,
-                pedidos: results, 
+                pedidos: results,
             });
         }
     } catch (error) {
@@ -132,10 +132,10 @@ router.get('/visao/detalhesPedidos', async (req, res) => {
     }
 });
 
- // Método POST para cadastrar um livro
- router.post('/', async (req, res) => {
+// Método POST para cadastrar um livro
+router.post('/', async (req, res) => {
     try {
-        const query = `INSERT INTO usuarios (cpf, nome, sobrenome, email, senha, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?)`;
+        const query = `INSERT INTO usuarios (cpf, nome, sobrenome, email, senha, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?)`;
         const replacements = [req.body.cpf, req.body.nome, req.body.sobrenome, req.body.email, req.body.senha, new Date(), new Date()];
 
         const [results, metadata] = await sequelize.query(query, { replacements });
@@ -154,26 +154,31 @@ router.get('/visao/detalhesPedidos', async (req, res) => {
 });
 
 //tualizar o status de um pedido específico.
-router.put('/:id', async(req, res) => {
+router.put('/:id', async (req, res) => {
     const id = req.params.id; //pega o id enviado pela requisição
     const { statusPedido } = req.body; //campo a ser alterado
-    try{
+    try {
         //altera o campo preco, no registro onde o id coincidir com o id enviado
         await sequelize.query("UPDATE pedidos SET statusPedido = ? WHERE id = ?", { replacements: [statusPedido, id], type: QueryTypes.UPDATE });
         res.status(200).json({ message: 'Pedido atualizado com sucesso.' }); //statusCode indica ok no update
-    }catch(error){
-        res.status(400).json({msg:error.message}); //retorna status de erro e mensagens
+    } catch (error) {
+        res.status(400).json({ msg: error.message }); //retorna status de erro e mensagens
     }
 });
 
-//método DELETE para deletar um carro
-router.delete('/:id', async(req, res) => {
-    const {id} = req.params; //pega o id enviado pela requisição para ser excluído
-    try{
-        await sequelize.query("DELETE FROM pedidos WHERE id = ?", { replacements: [id], type: QueryTypes.DELETE });
-        res.status(200).json({ message: 'Carro deletado com sucesso.' }); //statusCode indica ok no delete
-    }catch(error){
-        res.status(400).json({msg:error.message}); //retorna status de erro e mensagens
+//método DELETE para deletar através do id um usuário
+router.delete('/:id', async (req, res) => {
+    try {
+        const { id } = req.params; //pega o id enviado pela requisição para ser excluído
+
+        await sequelize.query("DELETE FROM usuarios WHERE id = ?",
+            {
+                replacements: [id],
+                type: QueryTypes.DELETE
+            });
+        res.status(200).json({ message: 'Usuário deletado com sucesso.' }); //statusCode indica ok no delete
+    } catch (error) {
+        res.status(400).json({ msg: error.message }); //retorna status de erro e mensagens
     }
 });
 
