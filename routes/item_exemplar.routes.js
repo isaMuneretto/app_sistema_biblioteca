@@ -8,19 +8,19 @@ sequelize.sync();
 
 //GET Retorna cliente com os pedidos com paginação e ordenação
 router.get('/', async (req, res) => {
-    const { page = 1, limit = 30 } = req.query;
     try {
+        const { page = 1, limit = 30 } = req.query;
+    
         const [results, metadata] = await sequelize.query(
-            `SELECT clientes.*, pedidos.statusPedido FROM clientes 
-            INNER JOIN pedidos ON clientes.id = pedidos.clienteId
-            ORDER BY clientes.updatedAt DESC LIMIT :limit OFFSET :offset`,
+            `SELECT itens.* FROM itens 
+            ORDER BY itens.updatedAt DESC LIMIT :limit OFFSET :offset`,
             {
                 replacements: { limit: limit, offset: (page - 1) * limit },
                 type: sequelize.QueryTypes.SELECT
             }
         );
         res.json({
-            carros: results,
+            itens: results,
         });
     } catch (error) {
         res.status(500).json({

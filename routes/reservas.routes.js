@@ -10,19 +10,19 @@ sequelize.sync();
 
 //GET Mostrar o inventário junto com os detalhes do carro.
 router.get('/', async (req, res) => {
-    const { page = 1, limit = 10 } = req.query;
     try {
+        const { page = 1, limit = 10 } = req.query;
+    
         const [results, metadata] = await sequelize.query(
-            `SELECT inventarios.*, carros.* FROM inventarios 
-            INNER JOIN carros ON inventarios.carroId = carros.id
-            ORDER BY inventarios.updatedAt DESC LIMIT :limit OFFSET :offset`,
+            `SELECT reservas.* FROM reservas 
+            ORDER BY reservas.updatedAt DESC LIMIT :limit OFFSET :offset`,
             {
                 replacements: { limit: limit, offset: (page - 1) * limit },
                 type: sequelize.QueryTypes.SELECT
             }
         );
         res.json({
-            inventarios: results,
+            reserva: results,
         });
     } catch (error) {
         res.status(500).json({

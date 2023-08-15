@@ -7,21 +7,21 @@ const detalhe_livro = require('../model/detalhes_livros');
 
 sequelize.sync();
 
-//GET Retorna carros com status do pedido
+
 router.get('/', async (req, res) => {
-    const { page = 1, limit = 10 } = req.query;
     try {
+        const { page = 1, limit = 10 } = req.query;
+    
         const [results, metadata] = await sequelize.query(
-            `SELECT carros.*, pedidos.statusPedido FROM carros 
-            INNER JOIN pedidos ON carros.id = pedidos.carroId
-            ORDER BY carros.updatedAt DESC LIMIT :limit OFFSET :offset`,
+            `SELECT detalhes_livros.* FROM detalhes_livros 
+            ORDER BY detalhes_livros.updatedAt DESC LIMIT :limit OFFSET :offset`,
             {
                 replacements: { limit: limit, offset: (page - 1) * limit },
                 type: sequelize.QueryTypes.SELECT
             }
         );
         res.json({
-            carros: results,
+            detalhe_livro: results,
         });
     } catch (error) {
         res.status(500).json({

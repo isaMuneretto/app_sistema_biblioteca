@@ -11,17 +11,15 @@ router.get('/', async (req, res) => {
     const { page = 1, limit = 10 } = req.query;
     try {
         const [results, metadata] = await sequelize.query(
-            `SELECT pedidos.*, clientes.*, carros.* FROM pedidos 
-            INNER JOIN clientes ON pedidos.clienteId = clientes.id
-            INNER JOIN carros ON pedidos.carroId = carros.id
-            ORDER BY pedidos.updatedAt DESC LIMIT :limit OFFSET :offset`,
+            `SELECT usuarios.* FROM usuarios 
+            ORDER BY usuarios.updatedAt DESC LIMIT :limit OFFSET :offset`,
             {
                 replacements: { limit: limit, offset: (page - 1) * limit },
                 type: sequelize.QueryTypes.SELECT
             }
         );
         res.json({
-            pedidos: results,
+            usuario: results,
         });
     } catch (error) {
         res.status(500).json({
